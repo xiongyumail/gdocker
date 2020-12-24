@@ -15,6 +15,7 @@ RUN sed -i.bak s/archive.ubuntu.com/${UBUNTU_MIRROR}/g /etc/apt/sources.list && 
     dbus-x11 \
     fonts-wqy-zenhei \
     vim && \
+    apt-get --fix-broken install && \
     apt-get clean && \
     apt-get autoclean && \
     rm -rf /tmp/* && \
