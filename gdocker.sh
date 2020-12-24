@@ -44,16 +44,17 @@ function help_install(){
     echo "  -h, --help            Show help"
     echo "  -n, --name            image name"
     echo "  -v, --version         image version"
-    echo "  -t, --tool            install tools(must)"
+    echo "  -t, --tool            install tools"
     return 0
 }
 
 function help_start(){
-    echo "./gdocker.sh start [-h --help] [-n name] [-v version] [-c command]"
+    echo "./gdocker.sh start [-h --help] [-n name] [-v version] [-c command] [-u update]"
     echo "  -h, --help            Show help"
     echo "  -n, --name            image name"
     echo "  -v, --version         image version"
     echo "  -c, --command         image start commad"
+    echo "  -u, --update          image update"
     return 0
 }
 
@@ -85,6 +86,7 @@ function install(){
             ;;
             -h|--help)
             HELP="1"
+            shift
             ;;
             *)
             # unknown option
@@ -97,11 +99,6 @@ function install(){
 
     WORK_RELPATH=$(realpath --relative-to=${GIT_PATH} ${WORK_PATH})
     TOOL_RELPATH=$(realpath --relative-to=${GIT_PATH} ${TOOL_FILE})
-
-    if [[ "${TOOL_RELPATH}" == "" ]]; then
-        color_echo ${RED} "tool file path wrong"
-        exit 2
-    fi
 
     color_echo ${BLUE} "WORK_PATH: ${WORK_PATH}"
     color_echo ${BLUE} "GIT_PATH: ${GIT_PATH}"
@@ -116,7 +113,11 @@ function install(){
     sudo docker stop ${IMAGE_NAME} 2> /dev/null
     sudo docker rm ${IMAGE_NAME} 2> /dev/null
 
-    sudo docker run --name ${IMAGE_NAME} -ti -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" /bin/bash /home/${IMAGE_NAME}/workspace/${TOOL_RELPATH}
+    if [[ "${TOOL_RELPATH}" == "" ]]; then
+        sudo docker run --name ${IMAGE_NAME} -ti -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" bash
+    else
+        sudo docker run --name ${IMAGE_NAME} -ti -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" /bin/bash /home/${IMAGE_NAME}/workspace/${TOOL_RELPATH}
+    fi
     sudo docker commit -m "install ok" ${IMAGE_NAME} "${IMAGE_NAME}:${IMAGE_VERSION}"
     sudo docker rm ${IMAGE_NAME}
 
@@ -126,6 +127,7 @@ function install(){
 
 function start(){
     CMD="bash"
+    UPDATE=""
     HELP=""
     while [[ $# > 0 ]];do
         key="$1"
@@ -142,8 +144,13 @@ function start(){
             CMD="$2"
             shift
             ;;
+            -u|--update)
+            UPDATE="1"
+            shift
+            ;;
             -h|--help)
             HELP="1"
+            shift
             ;;
             *)
             # unknown option
@@ -177,7 +184,7 @@ function start(){
         \
         "${IMAGE_NAME}:${IMAGE_VERSION}" ${CMD}
 
-    if [ "$2" == "update" ]; then
+    if [ "$UPDATE" == "1" ]; then
         sudo docker commit -m "update ok" ${IMAGE_NAME} "${IMAGE_NAME}:${IMAGE_VERSION}"
     fi
 
@@ -207,6 +214,7 @@ function clean(){
             ;;
             -h|--help)
             HELP="1"
+            shift
             ;;
             *)
             # unknown option
