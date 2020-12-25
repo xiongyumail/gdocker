@@ -37,12 +37,12 @@ vim tools.sh
 
 ```bash
 ./gdocker/gdocker.sh start --help
-./gdocker.sh start [-h --help] [-n name] [-v version] [-c command]
+./gdocker.sh start [-h --help] [-n name] [-v version] [-u update] [-c command]
   -h, --help            Show help
   -n, --name            image name
   -v, --version         image version
-  -c, --command         image start commad
   -u, --update          image update
+  -c, --command         image start commad
 ```
 
 ```bash

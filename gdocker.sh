@@ -49,12 +49,12 @@ function help_install(){
 }
 
 function help_start(){
-    echo "./gdocker.sh start [-h --help] [-n name] [-v version] [-c command] [-u update]"
+    echo "./gdocker.sh start [-h --help] [-n name] [-v version] [-u update] [-c command]"
     echo "  -h, --help            Show help"
     echo "  -n, --name            image name"
     echo "  -v, --version         image version"
-    echo "  -c, --command         image start commad"
     echo "  -u, --update          image update"
+    echo "  -c, --command         image start commad"
     return 0
 }
 
@@ -140,12 +140,12 @@ function start(){
             IMAGE_VERSION="$2"
             shift
             ;;
-            -c|--command)
-            CMD="$2"
-            shift
-            ;;
             -u|--update)
             UPDATE="1"
+            shift
+            ;;
+            -c|--command)
+            CMD="${@:2}"
             shift
             ;;
             -h|--help)
@@ -194,7 +194,6 @@ function start(){
 }
 
 function clean(){
-    CMD="bash"
     HELP=""
     CLEAN_FILE=""
     while [[ $# > 0 ]];do
@@ -206,10 +205,6 @@ function clean(){
             ;;
             -v|--version)
             IMAGE_VERSION="$2"
-            shift
-            ;;
-            -c|--command)
-            CMD="$2"
             shift
             ;;
             -h|--help)
