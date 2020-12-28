@@ -177,6 +177,8 @@ function start(){
         -e GTK_IM_MODULE=$GTK_IM_MODULE \
         -e QT_IM_MODULE=$QT_IM_MODULE \
         \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -v $(which docker):/bin/docker \
         -v /dev:/dev \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -v $HOME/.Xauthority:/home/${IMAGE_NAME}/.Xauthority \
