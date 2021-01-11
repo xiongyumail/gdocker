@@ -114,9 +114,9 @@ function install(){
     sudo docker rm ${IMAGE_NAME} 2> /dev/null
 
     if [[ "${TOOL_RELPATH}" == "" ]]; then
-        sudo docker run --name ${IMAGE_NAME} -ti -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" bash
+        sudo docker run --name ${IMAGE_NAME} -ti -e MY_NAME=${IMAGE_NAME} -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" bash
     else
-        sudo docker run --name ${IMAGE_NAME} -ti -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" /bin/bash /home/${IMAGE_NAME}/workspace/${TOOL_RELPATH}
+        sudo docker run --name ${IMAGE_NAME} -ti -e MY_NAME=${IMAGE_NAME} -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" /bin/bash /home/${IMAGE_NAME}/workspace/${TOOL_RELPATH}
     fi
     sudo docker commit -m "install ok" ${IMAGE_NAME} "${IMAGE_NAME}:${IMAGE_VERSION}"
     sudo docker rm ${IMAGE_NAME}
@@ -172,13 +172,12 @@ function start(){
         --net=host \
         --ipc=host \
         \
-        -e DISPLAY=$DISPLAY \
-        -e XMODIFIERS=$XMODIFIERS \
-        -e GTK_IM_MODULE=$GTK_IM_MODULE \
-        -e QT_IM_MODULE=$QT_IM_MODULE \
+        -e MY_NAME=${IMAGE_NAME} \
+        -e DISPLAY=${DISPLAY} \
+        -e XMODIFIERS=${XMODIFIERS} \
+        -e GTK_IM_MODULE=${GTK_IM_MODULE} \
+        -e QT_IM_MODULE=${QT_IM_MODULE} \
         \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        -v $(which docker):/bin/docker \
         -v /dev:/dev \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -v $HOME/.Xauthority:/home/${IMAGE_NAME}/.Xauthority \
