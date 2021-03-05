@@ -12,7 +12,9 @@ IMAGE_NAME="gdocker"
 IMAGE_VERSION="1.0.0"
 
 WORK_PATH=$(cd $(dirname $0); pwd)
-GIT_PATH=$(git rev-parse --show-superproject-working-tree --show-toplevel | head -1)
+GIT_PATH=$(cd ${WORK_PATH};git rev-parse --show-superproject-working-tree --show-toplevel | head -1)
+
+echo ${GIT_PATH}
 
 function hello() {
     # http://patorjk.com/software/taag/#p=display&f=3D-ASCII&t=gdocker
@@ -49,12 +51,13 @@ function help_install(){
 }
 
 function help_start(){
-    echo "./gdocker.sh start [-h --help] [-n name] [-v version] [-u update] [-c command]"
+    echo "./gdocker.sh start [-h --help] [-n name] [-v version] [-u update] [-c command] [-p project]"
     echo "  -h, --help            Show help"
     echo "  -n, --name            image name"
     echo "  -v, --version         image version"
     echo "  -u, --update          image update"
     echo "  -c, --command         image start commad"
+    echo "  -p, --project         projects path"
     return 0
 }
 
@@ -127,6 +130,7 @@ function install(){
 
 function start(){
     CMD="bash"
+    PROJECT=""
     UPDATE=""
     HELP=""
     while [[ $# > 0 ]];do
@@ -146,6 +150,10 @@ function start(){
             ;;
             -c|--command)
             CMD="${@:2}"
+            shift
+            ;;
+            -p|--project)
+            PROJECT=$(readlink -f ${2})
             shift
             ;;
             -h|--help)
@@ -182,6 +190,7 @@ function start(){
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -v $HOME/.Xauthority:/home/${IMAGE_NAME}/.Xauthority \
         -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace \
+        -v ${PROJECT}:/home/${IMAGE_NAME}/projects \
         \
         "${IMAGE_NAME}:${IMAGE_VERSION}" ${CMD}
 
