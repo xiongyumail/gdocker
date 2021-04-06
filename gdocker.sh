@@ -117,9 +117,9 @@ function install(){
     sudo docker rm ${IMAGE_NAME} 2> /dev/null
 
     if [[ "${TOOL_RELPATH}" == "" ]]; then
-        sudo docker run --name ${IMAGE_NAME} -ti -e MY_NAME=${IMAGE_NAME} -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" bash
+        sudo docker run --name ${IMAGE_NAME} -i -e MY_NAME=${IMAGE_NAME} -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" bash
     else
-        sudo docker run --name ${IMAGE_NAME} -ti -e MY_NAME=${IMAGE_NAME} -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" /bin/bash /home/${IMAGE_NAME}/workspace/${TOOL_RELPATH}
+        sudo docker run --name ${IMAGE_NAME} -i -e MY_NAME=${IMAGE_NAME} -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace "${IMAGE_NAME}:${IMAGE_VERSION}" /bin/bash /home/${IMAGE_NAME}/workspace/${TOOL_RELPATH}
     fi
     sudo docker commit -m "install ok" ${IMAGE_NAME} "${IMAGE_NAME}:${IMAGE_VERSION}"
     sudo docker rm ${IMAGE_NAME}
