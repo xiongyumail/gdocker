@@ -119,7 +119,7 @@ function install(){
     if [[ "${TOOL_RELPATH}" == "" ]]; then
         sudo docker run \
             --name ${IMAGE_NAME} \
-            -i \
+            -ti \
             -e MY_NAME=${IMAGE_NAME} \
             \
             -v /var/run/docker.sock:/var/run/docker.sock \
