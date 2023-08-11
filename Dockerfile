@@ -28,15 +28,16 @@ FROM essential as install
 MAINTAINER XiongYu <xiongyu@espressif.com>
 
 ARG USER_NAME
+ARG USER_HOME=/home/${USER_NAME}
 # Make a ${USER_NAME} user
 RUN adduser --disabled-password --gecos '' ${USER_NAME} && \
-    usermod -aG sudo ${USER_NAME} && \
+    usermod -aG sudo,dialout ${USER_NAME} && \
     echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     locale-gen zh_CN zh_CN.UTF-8  
 
 USER ${USER_NAME}
-WORKDIR /home/${USER_NAME}
-ENV HOME /home/${USER_NAME}
+WORKDIR ${USER_HOME}
+ENV HOME ${USER_HOME}
 ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN.UTF-8
 ENV LC_ALL zh_CN.UTF-8
