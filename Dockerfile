@@ -31,7 +31,7 @@ ARG USER_NAME
 ARG USER_HOME=/home/${USER_NAME}
 # Make a ${USER_NAME} user
 RUN adduser --disabled-password --gecos '' ${USER_NAME} && \
-    usermod -aG sudo,dialout ${USER_NAME} && \
+    usermod -aG sudo,dialout,root ${USER_NAME} && \
     echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     locale-gen zh_CN zh_CN.UTF-8 en_US.UTF-8 
 
