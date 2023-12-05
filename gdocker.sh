@@ -121,6 +121,7 @@ function install(){
             --name ${IMAGE_NAME} \
             -ti \
             -e MY_NAME=${IMAGE_NAME} \
+            -e MY_VER=${IMAGE_VERSION} \
             \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v $(which docker):/bin/docker \
@@ -132,6 +133,7 @@ function install(){
             --name ${IMAGE_NAME} \
             -i \
             -e MY_NAME=${IMAGE_NAME} \
+            -e MY_VER=${IMAGE_VERSION} \
             \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v $(which docker):/bin/docker \
@@ -199,6 +201,7 @@ function start(){
         --ipc=host \
         \
         -e MY_NAME=${IMAGE_NAME} \
+        -e MY_VER=${IMAGE_VERSION} \
         -e DISPLAY=${DISPLAY} \
         -e XMODIFIERS=${XMODIFIERS} \
         -e GTK_IM_MODULE=${GTK_IM_MODULE} \
