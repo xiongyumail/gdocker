@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as essential
+FROM ubuntu:22.04 as essential
 
 MAINTAINER XiongYu <xiongyu@espressif.com>
 
