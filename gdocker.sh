@@ -214,6 +214,7 @@ function start(){
         -v $HOME/.Xauthority:/home/${IMAGE_NAME}/.Xauthority \
         -v ${GIT_PATH}:/home/${IMAGE_NAME}/workspace \
         -v ${PROJECT}:/home/${IMAGE_NAME}/projects \
+	-v $HOME/.ssh:/home/${IMAGE_NAME}/.ssh \
         \
         "${IMAGE_NAME}:${IMAGE_VERSION}" ${CMD}
 
